@@ -1,14 +1,16 @@
-const express = require('express');
+// src/app.js
+const express = require("express");
+const dotenv = require("dotenv");
+dotenv.config();
+
+const authRoutes = require("./routes/auth.routes");
+const articleRoutes = require("./routes/article.routes");
+
 const app = express();
-const authRoutes = require('./routes/auth.routes');
-
-// Middleware
 app.use(express.json());
-app.use('/api/auth', authRoutes);
 
-// Test route
-app.get('/', (req, res) => {
-  res.send('Blog API is running');
-});
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/articles", articleRoutes);
 
-module.exports = app;
+module.exports = app; // ✅ Export app for tests
