@@ -1,6 +1,6 @@
 const request = require('supertest');
 const app = require('../app');
-const User = require('../models/User');
+const User = require('../models/user.model');
 const Blog = require('../models/Blog');
 
 let authToken;
