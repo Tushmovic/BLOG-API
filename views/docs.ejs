@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        /* Add beautiful styles for documentation page */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .nav {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 API Documentation</h1>
+        <p style="text-align: center;"><%= message %></p>
+        
+        <div class="nav">
+            <a href="/" class="btn">🏠 Home</a>
+            <a href="/api" class="btn">🔗 JSON API</a>
+        </div>
+        
+        <h2>API Endpoints</h2>
+        <p>This documentation is for developers. Regular users should use the web interface above.</p>
+        
+        <h3>Authentication Endpoints</h3>
+        <pre><code>POST /api/auth/signup
+POST /api/auth/signin</code></pre>
+        
+        <h3>Blog Endpoints</h3>
+        <pre><code>GET    /api/blogs
+POST   /api/blogs
+GET    /api/blogs/:id
+PATCH  /api/blogs/:id
+DELETE /api/blogs/:id</code></pre>
+        
+        <p>Visit <a href="/api">/api</a> for complete JSON documentation.</p>
+    </div>
+</body>
+</html>

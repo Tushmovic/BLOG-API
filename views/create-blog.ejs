@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .nav {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .nav a {
+            color: #667eea;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        
+        .char-count {
+            text-align: right;
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✍️ Create Blog Post</h1>
+        <p class="subtitle"><%= message %></p>
+        
+        <form id="blogForm">
+            <div class="form-group">
+                <label for="title">Blog Title *</label>
+                <input type="text" id="title" name="title" required placeholder="Enter a catchy title for your blog">
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" id="description" name="description" placeholder="Brief description of your blog">
+            </div>
+            
+            <div class="form-group">
+                <label for="body">Blog Content *</label>
+                <textarea id="body" name="body" required placeholder="Write your amazing blog content here..."></textarea>
+                <div class="char-count">
+                    <span id="wordCount">0</span> words • 
+                    <span id="readTime">0</span> min read
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="tags">Tags (comma separated)</label>
+                <input type="text" id="tags" name="tags" placeholder="technology, programming, web-development">
+            </div>
+            
+            <div>
+                <button type="submit" class="btn">Publish Blog</button>
+                <button type="button" class="btn btn-secondary" onclick="saveAsDraft()">Save as Draft</button>
+                <a href="/blogs" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+        
+        <div class="nav">
+            <a href="/">🏠 Home</a> • 
+            <a href="/blogs">📚 View Blogs</a>
+        </div>
+    </div>
+
+    <script>
+        // Calculate reading time and word count
+        const bodyTextarea = document.getElementById('body');
+        const wordCountSpan = document.getElementById('wordCount');
+        const readTimeSpan = document.getElementById('readTime');
+        
+        bodyTextarea.addEventListener('input', function() {
+            const wordCount = this.value.split(/\s+/).filter(word => word.length > 0).length;
+            const readTime = Math.ceil(wordCount / 200);
+            
+            wordCountSpan.textContent = wordCount;
+            readTimeSpan.textContent = readTime;
+        });
+        
+        document.getElementById('blogForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await createBlog('published');
+        });
+        
+        function saveAsDraft() {
+            createBlog('draft');
+        }
+        
+        async function createBlog(state) {
+            const formData = new FormData(document.getElementById('blogForm'));
+            const data = Object.fromEntries(formData);
+            
+            // Convert tags string to array
+            if (data.tags) {
+                data.tags = data.tags.split(',').map(tag => tag.trim()).filter(tag => tag);
+            }
+            
+            data.state = state;
+            
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch('/api/blogs', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': token ? `Bearer ${token}` : ''
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                
+                if (result.status) {
+                    alert('✅ ' + result.message);
+                    window.location.href = '/blogs';
+                } else {
+                    alert('❌ ' + result.message);
+                }
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

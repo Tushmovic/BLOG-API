@@ -1,13 +1,15 @@
 const express = require('express');
-const auth = require('../middleware/auth');
 const router = express.Router();
 
-// Example protected user route
-router.get('/profile', auth, (req, res) => {
-  res.status(200).json({
+console.log('✅ User routes loaded successfully!');
+
+router.get('/profile', (req, res) => {
+  res.json({
     status: true,
+    message: '👤 User profile endpoint',
     data: {
-      user: req.user
+      message: 'User profile - authentication required',
+      note: 'This endpoint requires JWT authentication'
     }
   });
 });

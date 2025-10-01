@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        /* Similar beautiful styles as index.ejs */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .blog-list {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .blog-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .nav {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 <%= title %></h1>
+            <p><%= message %></p>
+        </div>
+
+        <div class="nav">
+            <a href="/" class="btn">🏠 Home</a>
+            <a href="/create-blog" class="btn">✍️ Write Blog</a>
+        </div>
+
+        <div class="blog-list">
+            <div class="blog-card">
+                <h3>No blogs yet</h3>
+                <p>Be the first to create a blog post and share your story with the community!</p>
+                <a href="/create-blog" class="btn">Create First Blog</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
