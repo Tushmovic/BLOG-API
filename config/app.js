@@ -1,9 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
 
-// Route imports
-const authRoutes = require('./routes/auth');
+// Import routes
+const authRoutes = require('./routes/auth.routes');
 const blogRoutes = require('./routes/blogs');
 const userRoutes = require('./routes/users');
 
@@ -11,7 +10,7 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
@@ -21,9 +20,10 @@ app.use('/api/users', userRoutes);
 
 // Home route
 app.get('/', (req, res) => {
-  res.status(200).json({
+  res.json({
     status: true,
-    message: 'Blog API is running!',
+    message: 'Blog API is running! 🚀',
+    timestamp: new Date().toISOString(),
     endpoints: {
       auth: {
         signup: 'POST /api/auth/signup',
@@ -41,7 +41,7 @@ app.get('/', (req, res) => {
   });
 });
 
-// Handle undefined routes
+// Handle 404 routes
 app.all('*', (req, res) => {
   res.status(404).json({
     status: false,
@@ -49,14 +49,12 @@ app.all('*', (req, res) => {
   });
 });
 
-// Global error handler
-app.use((err, req, res, next) => {
-  err.statusCode = err.statusCode || 500;
-  err.status = err.status || 'error';
-
-  res.status(err.statusCode).json({
+// Error handling middleware
+app.use((error, req, res, next) => {
+  console.error('Error:', error);
+  res.status(500).json({
     status: false,
-    message: err.message
+    message: 'Something went wrong!'
   });
 });
 
