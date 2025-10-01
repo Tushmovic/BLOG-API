@@ -1,3 +1,5 @@
+require("dotenv").config();
+console.log("JWT_SECRET:", process.env.JWT_SECRET);
 // src/server.js
 const app = require("./app");
 const mongoose = require("mongoose");

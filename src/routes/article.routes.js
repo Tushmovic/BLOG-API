@@ -12,13 +12,25 @@ const {
 
 const { authenticate } = require("../middlewares/auth.middleware");
 
-// All handlers must be functions
+// Create article (draft)
 router.post("/", authenticate, createArticle);
-router.get("/", getArticles);
-router.get("/:id", getArticleById);
-router.put("/:id", authenticate, updateArticle);
-router.patch("/:id/publish", authenticate, publishArticle);
-router.delete("/:id", authenticate, deleteArticle);
+
+// List own articles
 router.get("/me/list", authenticate, getMyArticles);
+
+// List published articles with pagination, search, filter, sort
+router.get("/", getArticles);
+
+// Get single article by ID
+router.get("/:id", getArticleById);
+
+// Update article
+router.put("/:id", authenticate, updateArticle);
+
+// Publish article
+router.patch("/:id/publish", authenticate, publishArticle);
+
+// Delete article
+router.delete("/:id", authenticate, deleteArticle);
 
 module.exports = router;
